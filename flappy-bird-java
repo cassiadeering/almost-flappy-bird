@@ -1,0 +1,81 @@
+float x, y;
+float gravity;
+float yVel;
+boolean alive;
+
+int width = 600;
+int height = 300;
+int rectWidth, rectHeight;
+
+//creates font, puts value in "font"
+PFont font = createFont("Arial", 32);
+
+//point - x and y coords
+float xPos, yPos;
+//xPos = width;
+//yPos = random(0, height);
+PVector rectangle = new PVector(xPos, yPos);
+void setup() {
+  size(width, height);
+  
+  //centre
+  x = width/2;
+  y = height/2;
+  //moves .2 pixels down every time draw is called, multiple times/second
+  gravity = .2;
+  yVel = 0;
+  alive = true;
+  rectWidth = 50;
+  rectHeight = 200;
+}
+
+void draw(){
+  //r,g,b
+  background(20, 200, 200);
+  if(alive) {
+    ellipse(x,y,50,20);
+    rect(rectangle.x, rectangle.y, rectWidth, rectHeight);
+    yVel = yVel + gravity;
+    y = y + yVel;
+    update();
+    collision();
+    
+  } else {
+    fill(255, 0, 255);
+    textFont(font);
+    textAlightn(CENTER);
+    text("GAME OVER", width/2, height/2);
+  }
+}
+
+void jump() {
+  yVel = -5;
+}
+
+void update() {
+  if (y > height) {
+    alive = false;
+  }
+  rectangle.x = rectangle.x -5;
+  
+  if (rectangle.x < 0) {
+    rectangle.x = width;
+    rectangle.y = random(0, height);
+  }
+}
+
+void collision() {
+  if(x>= rectangle.x) {
+    if(x <= rectangle.x + rectWidth) {
+      if(y >= rectangle.y) {
+        if(y <= rectangle.y + rectHeight) {
+          alive = false;
+        }
+      }
+    }  
+  }
+}
+
+void keyPressed() {
+  jump();
+}
